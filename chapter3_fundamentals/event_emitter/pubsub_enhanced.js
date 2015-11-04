@@ -13,6 +13,16 @@ channel.on('join', function(id, client){
 		}
 	};
 	this.on('broadcast', this.subscriptions[id]);
+
+	this.on('leave', function(id) {
+		this.removeListener('broadcast', this.subscriptions[id]);
+		channel.emit('broadcast', id, id + "has left the chat.\n");
+	});
+
+	this.on('shutdown', function(){
+		channel.emit('broadcast', '', "Chat has been shut down.\n");
+		channel.removeAllListeners('broadcast');
+	});
 });
 
 var server = net.createServer(function(client){
@@ -20,7 +30,13 @@ var server = net.createServer(function(client){
 	channel.emit('join', id, client);
 	client.on('data', function(data){
 		data = data.toString();
+		if (data === 'shutdown\r\n') {
+			channel.emit('shutdown');
+		}
 		channel.emit('broadcast', id, data);
+	});
+	client.on('close', function(){
+		channel.emit('leave', id);
 	});
 });
 
