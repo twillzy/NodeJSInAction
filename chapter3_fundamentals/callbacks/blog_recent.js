@@ -102,27 +102,3 @@ var hadError = function(err, res) {
 	console.error(err);
 	res.end('Server error');
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
