@@ -52,6 +52,7 @@ var server = http.createServer(function(req, res) {
 	}
 }).listen(3000);
 
+// curl -X DELETE http://localhost:3000/1
 
 
 
